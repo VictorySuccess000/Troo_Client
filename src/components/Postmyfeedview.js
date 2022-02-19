@@ -97,7 +97,7 @@ const Postview = ({
           />
         </figure>
         <h4 className="fw-700 text-grey-900 font-xssss mt-1">
-          <label className="fw-900 font-xss">{username}&nbsp;</label>
+          <label className="fw-900 font-xss">{creatorprofile.name}&nbsp;</label>
           <span className="mentiontag fw-600 font-xsss">@{username}</span>
           <span className="ms-2 mentiontag">
             {formatDistance(new Date(blog.date), new Date(), { addSuffix: true })}

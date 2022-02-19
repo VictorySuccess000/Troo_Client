@@ -30,7 +30,8 @@ const Postview = ({
   // const [owneraddr, setowneraddr] = useState(true);
   const [isCopied, setIsCopied] = useState(false);
   const [username, setUsername] = useState("");
-  const [vcoin, setVcoin] = useState("");
+  const [user_id, setUserid] = useState("");
+  // const [vcoin, setVcoin] = useState("");
   const [creatorprofile, set_profile] = useState("");
   // const [creatoraddress, set_address] = useState(null);
   const [blog, setMyblog] = useState(blogItem);
@@ -74,7 +75,7 @@ const Postview = ({
       const showusername = async () => {
         const res = await api.post("/auth/name", { id: blog.creator });
         setUsername(res.data);
-        setVcoin(res.data.vcoin);
+        // setVcoin(res.data.vcoin);
       };
       if (isauthenticated) showusername();
 
@@ -289,13 +290,15 @@ const Postview = ({
               : "save"}
           </span>
         </div>
-        <div className="card-body p-0 d-flex"><button
-          className="border-0 bg-transparent d-flex align-items-center fw-600 text-grey-900 lh-26 font-xssss text-dark"
-          onClick={() => confirmDonate()}
-        >
-          <i className="feather-dollar-sign btn-round-sm font-xs text-dark"></i>
-          Donate
-        </button></div>
+        {blog.creator != user._id ? <div className="card-body p-0 d-flex">
+          <button
+            className="border-0 bg-transparent d-flex align-items-center fw-600 text-grey-900 lh-26 font-xssss text-dark"
+            onClick={() => confirmDonate()}
+          >
+            <i className="feather-dollar-sign btn-round-sm font-xs text-dark"></i>
+            Donate
+          </button>
+        </div> : ""}
         <div
           className={`card-body p-0 pointer ms-auto d-flex align-items-center fw-600 text-dark lh-26 font-xssss ${menuClass}`}
           id={`dropdownMenu${blog._id}`}
@@ -325,11 +328,9 @@ const Postview = ({
             </button>
           )}
         </div>
-
       </div>
-      {confirmModal == true ? <PayDonate value={blog} reValue={newDescription} parentCallback={handleCallback} changeflag={handlechangeflag} /> : ""}
+      {confirmModal == true ? <PayDonate value={blog} userValue={user} parentCallback={handleCallback} changeflag={handlechangeflag} /> : ""}
     </div>
-
   );
 };
 

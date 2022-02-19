@@ -4,6 +4,12 @@ import { MentionsInput, Mention } from "react-mentions";
 import { Button, Modal } from "react-bootstrap";
 import api from "../utils/api";
 import "../pages/style.css";
+import {
+  notifysuccess,
+  notifywarning,
+  notifyerror,
+} from "../components/notify";
+
 const EditDescription = (props) => {
   //modal
   const [show, setShow] = useState(true);
@@ -57,29 +63,36 @@ const EditDescription = (props) => {
     newContent = newContent.split("~~~_").join(``);
     newContent = newContent.split("$$$~~~").join("");
     if (newContent !== "") {
-      //hash tag
-      // let description = newContent.trim();
-      //Call to your DataBase like backendModule.savePost(body,  along_with_other_params);
-      tagNames.map(async (tag) => {
-        tag = tag.replace("#", "");
+      if (newContent == props.reValue) {
+        notifyerror("Not Change Value!");
+      } else {
+        //hash tag
+        // let description = newContent.trim();
+        //Call to your DataBase like backendModule.savePost(body,  along_with_other_params);
+        tagNames.map(async (tag) => {
+          tag = tag.replace("#", "");
+          try {
+            await api.post("/hashtag/tag", {
+              name: tag,
+            });
+          } catch (error) {
+            console.log(error);
+          }
+        });
         try {
-          await api.post("/hashtag/tag", {
-            name: tag,
+          const newBlog = await api.put(`/blog/edit/${props.value._id}`, {
+            description: newContent,
           });
+          notifysuccess("Description Updated");
+          handleChange(newContent);
         } catch (error) {
+          notifyerror(error);
           console.log(error);
         }
-      });
-      try {
-        const newBlog = await api.put(`/blog/edit/${props.value._id}`, {
-          description: newContent,
-        });
-        console.log(newBlog);
-        handleChange(newContent);
-      } catch (error) {
-        console.log(error);
+        handleClose();
       }
-      handleClose();
+    } else {
+      notifyerror("Invalid Value!")
     }
   };
 

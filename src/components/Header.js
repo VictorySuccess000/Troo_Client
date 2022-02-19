@@ -85,30 +85,6 @@ const Header = () => {
         <span className="dot-count bg-warning"></span>
         <i className="feather-bell font-xl text-dark"></i>
       </span>
-      {/* <div className={`dropdown-menu bg-dark p-4 right-0 rounded-xxl border-0 shadow-lg ${notiClass}`} style={{top:'20px'}} aria-labelledby="dropdownMenu3">
-                <h4 className="fw-700 font-xss text-white mb-4">Notification</h4>
-                <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-                    <img src="assets/images/user.png" alt="user" className="w40 position-absolute left-0" />
-                    <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">Hendrix Stamp <span className="text-grey-400 font-xsssss fw-600 float-right mt-1"> 3 min</span></h5>
-                    <h6 className="text-grey-500 fw-500 font-xssss lh-4">There are many variations of pass..</h6>
-                </div>
-                <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-                    <img src="assets/images/user.png" alt="user" className="w40 position-absolute left-0" />
-                    <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">Goria Coast <span className="text-grey-400 font-xsssss fw-600 float-right mt-1"> 2 min</span></h5>
-                    <h6 className="text-grey-500 fw-500 font-xssss lh-4">Mobile Apps UI Designer is require..</h6>
-                </div>
-
-                <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-                    <img src="assets/images/user.png" alt="user" className="w40 position-absolute left-0" />
-                    <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">Surfiya Zakir <span className="text-grey-400 font-xsssss fw-600 float-right mt-1"> 1 min</span></h5>
-                    <h6 className="text-grey-500 fw-500 font-xssss lh-4">Mobile Apps UI Designer is require..</h6>
-                </div>
-                <div className="card bg-transparent-card w-100 border-0 ps-5">
-                    <img src="assets/images/user.png" alt="user" className="w40 position-absolute left-0" />
-                    <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">Victor Exrixon <span className="text-grey-400 font-xsssss fw-600 float-right mt-1"> 30 sec</span></h5>
-                    <h6 className="text-grey-500 fw-500 font-xssss lh-4">Mobile Apps UI Designer is require..</h6>
-                </div>
-            </div> */}
       <Link
         to="/defaultmessage"
         className="p-2 text-center ms-3 menu-icon chat-active-btn"
@@ -117,8 +93,8 @@ const Header = () => {
       </Link>
       <Darkbutton />
       <div className="p-0 ms-3 menu-icon">
-        <h3 className="border-bottom-1 border-dark">{vcoin} Vcoin</h3>
-        <h3>{Number(1)}Vcoin/$</h3>
+        <h3 className="border-bottom-1 border-dark">{Math.round(vcoin * 100) / 100} Tcoin</h3>
+        <h3>{Number(1)} Tcoin / $</h3>
       </div>
 
       <nav
@@ -216,18 +192,17 @@ const Header = () => {
                   <i
                     onMouseOver={(e) => expandover(e)}
                     onMouseOut={(e) => expandover(e)}
-                    className={`ms-3 font-xl ${
-                      isafterexpand
-                        ? "feather-chevrons-right"
-                        : "feather-chevrons-left"
-                    } me-4`}
+                    className={`ms-3 font-xl ${isafterexpand
+                      ? "feather-chevrons-right"
+                      : "feather-chevrons-left"
+                      } me-4`}
                   ></i>
                   <span className="font-md">
                     {isafterexpand ? "Expand" : "Collapse"}
                   </span>
                 </li>
                 <li>
-                  <Link to="/checkout" className="nav-content-bttn open-font">
+                  <Link to="/wallet" className="nav-content-bttn open-font">
                     <i
                       onMouseOver={(e) => expandover(e)}
                       onMouseOut={(e) => expandover(e)}

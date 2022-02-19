@@ -7,6 +7,7 @@ import Settings from "./pages/Settings";
 import Account from "./pages/Account";
 import Photo from "./pages/EditAvater";
 import Editbakcground from "./pages/EditBack";
+import Wallet from "./pages/wallet";
 import Contactinfo from "./pages/Contactinfo";
 import Password from "./pages/Password";
 import Payment from "./pages/Payment";
@@ -20,6 +21,8 @@ import Event from "./pages/Event";
 import UserProfile from "./pages/UserProfile";
 import Videos from "./pages/Videos";
 import Notfound from "./pages/Notfound";
+import Send from "./pages/Send";
+import Swap from "./pages/Swap";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import ProtectedRoute from "./protectedroute";
 const Routes = () => {
@@ -82,6 +85,21 @@ const Routes = () => {
           exact
           path={`${process.env.PUBLIC_URL}/editbackground`}
           component={Editbakcground}
+        />
+        <ProtectedRoute
+          exact
+          path={`${process.env.PUBLIC_URL}/wallet`}
+          component={Wallet}
+        />
+        <ProtectedRoute
+          exact
+          path={`${process.env.PUBLIC_URL}/send`}
+          component={Send}
+        />
+        <ProtectedRoute
+          exact
+          path={`${process.env.PUBLIC_URL}/swap`}
+          component={Swap}
         />
         <ProtectedRoute
           exact

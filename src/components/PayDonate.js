@@ -1,153 +1,143 @@
-import React, { useState, useEffect, useRef, Fragment } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useRef } from "react";
 import { MentionsInput, Mention } from "react-mentions";
-import { Button, Modal } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Modal } from "react-bootstrap";
 import api from "../utils/api";
 import "../pages/style.css";
-const EditDescription = (props) => {
+import { set_vcoin } from "../redux/actions/auth";
+import "react-alert-confirm/dist/index.css";
+import confirm from "react-alert-confirm";
+
+import {
+    notifysuccess,
+    notifywarning,
+    notifyerror,
+} from "../components/notify";
+
+const Donate = (props) => {
+    const dispatch = useDispatch();
+    const { vcoin } = useSelector((state) => state.auth);
     //modal
     const [show, setShow] = useState(true);
-    const handleClose = () => { props.changeflag(false); setShow(false) };
-
-    const { user } = useSelector((state) => state.auth); // here, indicate reducer
-
-    const keydown = (e) => {
-        return e.keyCode;
-    };
+    const handleClose = () => { setShow(false); props.changeflag(false); };
 
     //hastag
-    const [content, setContent] = useState(props.reValue);
-    const [tagNames, setTagNames] = useState([]);
+    const [donateCoin, setDonateCoin] = useState(0);
+    const [numberValidate, setNumValidate] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
     const myInput = useRef();
-
-    useEffect(() => {
-        setContent(props.reValue);
-    }, []);
-    function addContent(input) {
-        if (input.length <= 350) {
-            setContent(input);
+    function addAmount(input) {
+        setDonateCoin(input);
+        if (isNaN(input)) {
+            setDonateCoin(input.slice(0, -1));
         }
-        let length = input.length;
-        if (length <= 349) setContent(input);
-        if (keydown === 8 || keydown === 46) setContent(input);
     }
 
-    async function asyncTags(query, callback) {
-        if (!query) return;
-        api.get(`/hashtag/tag/search?name=${query}`)
-            .then((res) => {
-                if (res.data.tags.length) {
-                    const suggestion = { id: query, display: `#${query}` };
-                    const tagsArray = res.data.tags.map((tag) => ({
-                        id: `#${tag.name}`,
-                        display: `#${tag.name}`,
-                    }));
-                    return [...tagsArray, suggestion];
-                } else {
-                    return [{ id: `#${query}`, display: `#${query}` }];
-                }
-            })
-            .then(callback);
-    }
-
-    const Uploadsubmit = async (e) => {
-        e.preventDefault();
-        let newContent = content;
-        newContent = newContent.split("$$$_").join('');
-        newContent = newContent.split("~~~_").join(``);
-        newContent = newContent.split("$$$~~~").join("");
-        if (newContent !== "") {
-            //hash tag
-            // let description = newContent.trim();
-            //Call to your DataBase like backendModule.savePost(body,  along_with_other_params);
-            tagNames.map(async (tag) => {
-                tag = tag.replace("#", "");
-                try {
-                    await api.post("/hashtag/tag", {
-                        name: tag,
-                    });
-                } catch (error) {
-                    console.log(error);
-                }
-            });
-            try {
-                const newBlog = await api.put(`/blog/edit/${props.value._id}`, {
-                    description: newContent,
-                });
-                console.log(newBlog);
-                handleChange(newContent);
-            } catch (error) {
-                console.log(error);
-            }
+    const Uploadsubmit = async () => {
+        const processed = await api.put("/blog/donate", {
+            tcoin: donateCoin.trim(),
+            userid: props.userValue._id,
+            creatorid: props.value.creator
+        });
+        if (processed) {
+            dispatch(set_vcoin(processed.data.vcoin - donateCoin));
+            notifysuccess("Successfully Donated");
             handleClose();
+        } else {
+            notifyerror("Disconnected Server");
         }
     };
 
-    const handleChange = (checked) => {
-        props.parentCallback(checked);
-        props.changeflag(false);
-    };
+    // Confirm Modal
+    function ConfirmModal() {
+        if (donateCoin == 0) {
+            setNumValidate("error")
+            setErrorMsg("Empty Value!");
+            notifyerror("Empty Value!");
+        } else if (isNaN(donateCoin)) {
+            setNumValidate("error")
+            setErrorMsg("Must be Number!");
+            notifyerror("Must be Number!");
+        } else if (donateCoin > vcoin) {
+            setNumValidate("error")
+            setErrorMsg("Not enough TCoin!");
+            notifyerror("Not enough TCoin!");
+        } else {
+            handleClose();
+            confirm({
+                title: "Are you sure?",
+                language: "en",
+                content: "Please Confirm Again!",
+                okText: "Yes",
+                cancelText: "No",
+                onOk: () => Uploadsubmit()
+            });
+        }
+    }
 
-    return (<>
-        <Modal show={show} onHide={handleClose} className="modalContent">
-            <Modal.Header closeButton className="bg-black rounded-0">
-                <div className="d-flex w-100 upload">
-                    <h4 className="font-lg text-white fw-600 ms-4 mb-0 mt-2">
-                        Donate
-                    </h4>
-                </div>
-            </Modal.Header>
-            <Modal.Body className="card bg-black rounded-0">
-                <form action="#">
-                    <div className="row">
-                        <div className="col-lg-12 mb-1">
-                            <div className="form-gorup">
-                                <label className="mont-font fw-600 font-md revertcolor ms-2 mb-0 mt-2">
-                                    What's amount?
-                                </label>
-                                <MentionsInput
-                                    className="mentioFns font-sm"
-                                    inputRef={myInput}
-                                    spellCheck="false"
-                                    placeholder="Type less than 350 characters"
-                                    value={content.replace(/<[^>]+>/g, '')}
-                                    onChange={(event) => addContent(event.target.value)}
-                                    required={true}
-                                >
-                                    <Mention
-                                        trigger="#"
-                                        data={asyncTags}
-                                        markup="$$$___id__~~~___display__$$$~~~"
-                                        style={{ backgroundColor: "#5e9ede", }}
-                                        onAdd={(display) => setTagNames((tagNames) => [...tagNames, display])}
-                                        appendSpaceAdd={true}
+
+
+    return (
+        <>
+            <Modal show={show} onHide={handleClose} className="modalContent">
+                <Modal.Header closeButton className="bg-black rounded-0">
+                    <div className="d-flex w-100 upload">
+                        <h4 className="font-lg text-white fw-600 ms-4 mb-0 mt-2">
+                            Donate
+                        </h4>
+                    </div>
+                </Modal.Header>
+                <Modal.Body className="card bg-black rounded-0">
+                    <form action="#">
+                        <div className="row">
+                            <div className="col-lg-12 mb-1">
+                                <div className="form-gorup">
+                                    <label className="mont-font fw-600 font-md revertcolor ms-2 mb-0 mt-2">
+                                        What's amount?
+                                    </label>
+                                    <MentionsInput
+                                        className={`mentioFns font-sm ${numberValidate}`}
+                                        inputRef={myInput}
+                                        spellCheck="false"
+                                        value={donateCoin}
+                                        onChange={(event) => addAmount(event.target.value)}
+                                        required={true}
                                     >
-                                    </Mention>
-                                </MentionsInput>
+                                        <Mention
+                                            trigger="#"
+                                            appendSpaceAdd={true}
+                                        >
+                                        </Mention>
+                                    </MentionsInput>
+                                    <label className="mb-0 mt-2 errorMsg">
+                                        {errorMsg}
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="">
-                    </div>
-                    <div className="row"></div>
-                </form>
-            </Modal.Body>
-            <Modal.Footer className="bg-black rounded-0">
-                <button
-                    onClick={handleClose}
-                    className="bg-black text-center text-white font-md fw-600 p-1 w175 badge-pill d-inline-block"
-                >
-                    Confirm
-                </button>
-                <button
-                    onClick={handleClose}
-                    className="bg-black text-center text-white font-md fw-600 p-1 w175 badge-pill d-inline-block"
-                >
-                    Cancel
-                </button>
-            </Modal.Footer>
-        </Modal>
-    </>);
+                        <div className="">
+                        </div>
+                        <div className="row"></div>
+                    </form>
+                </Modal.Body>
+                <Modal.Footer className="bg-black rounded-0">
+                    <button
+                        // onClick={Uploadsubmit}
+                        onClick={ConfirmModal}
+                        className="bg-black text-center text-white font-md fw-600 p-1 w175 badge-pill d-inline-block"
+                    >
+                        Confirm
+                    </button>
+                    <button
+                        onClick={handleClose}
+                        className="bg-black text-center text-white font-md fw-600 p-1 w175 badge-pill d-inline-block"
+                    >
+                        Cancel
+                    </button>
+                </Modal.Footer>
+            </Modal>
+
+        </>);
 };
 
-export default EditDescription;
+export default Donate;

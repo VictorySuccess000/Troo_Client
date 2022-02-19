@@ -7,9 +7,9 @@ import Rightchat from '../components/Rightchat';
 import Appfooter from '../components/Appfooter';
 import Popupchat from '../components/Popupchat';
 import CheckoutWithStripe from '../components/CheckoutWithStripe';
-const Payment =()=> {
-    let dispatch=useDispatch();
-    const [vcoinamount, setvcoinamount]= useState(0);
+const Payment = () => {
+    let dispatch = useDispatch();
+    const [vcoinamount, setvcoinamount] = useState(0);
     return (
         <Fragment>
             <Header />
@@ -23,12 +23,12 @@ const Payment =()=> {
 
                             <div className="card w-100 border-0 bg-white shadow-xs p-0 mb-4">
                                 <div className="card-body p-4 w-100 bg-black border-0 d-flex rounded-3">
-                                    <Link to="/settings" className="d-inline-block mt-2"><i className="ti-arrow-left font-sm text-white"></i></Link>
+                                    <Link to="/wallet" className="d-inline-block mt-2"><i className="ti-arrow-left font-sm text-white"></i></Link>
                                     <h4 className="font-xs text-white fw-600 ms-4 mb-0 mt-2">Payment Method</h4>
                                 </div>
                                 <div className="card-body p-lg-5 p-4 w-100 border-0">
-                                    <div className="row">       
-                                        <CheckoutWithStripe/>
+                                    <div className="row">
+                                        <CheckoutWithStripe />
                                         {/* <div className="col-lg-5">
                                             <div className="col-lg-12 ps-0">
                                                 <h4 className="mb-4 font-lg fw-700 mont-font mb-5">Saved Card </h4>
@@ -158,7 +158,7 @@ const Payment =()=> {
                                                 </div>
                                             </div>
                                         </div>*/}
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
 
