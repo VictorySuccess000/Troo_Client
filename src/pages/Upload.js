@@ -50,7 +50,7 @@ const Password = () => {
   }
 
   const [selecthandle, selectHandleChangeState] = useState(1);
-  const [selectedText, setSelectedText] = useState("Show");
+  const [selectedText, setSelectedText] = useState("Anonymous");
   const [selectedIcon, setSelectedIcon] = useState("feather-eye");
 
   const Uploadsubmit = async (e) => {
@@ -85,7 +85,7 @@ const Password = () => {
           else {
             notifysuccess("success upload");
             setContent("");
-            setSelectedText("Show");
+            setSelectedText("Anonymous");
             setSelectedIcon("feather-eye-off");
             updateFileUrl(null);
           }
@@ -119,7 +119,7 @@ const Password = () => {
     document.querySelector(".hsdropdown").classList.toggle('active');
     document.querySelector(".textBox").classList.toggle('active');
     document.querySelector(".option").classList.toggle('active');
-    if (selectedText == "Show") {
+    if (selectedText == "Anonymous") {
       document.querySelector(".rs").setAttribute("checked", true);
     } else {
       document.querySelector(".rs").removeAttribute("checked");
@@ -129,7 +129,7 @@ const Password = () => {
   const sh = (type) => {
     document.querySelector(".textBox").text = type;
     if (type == "Show") {
-      setSelectedText("Show");
+      setSelectedText("Anonymous");
       setSelectedIcon("feather-eye");
       selectHandleChangeState(1);
       document.querySelector(".rs").setAttribute("checked", true);
@@ -137,7 +137,7 @@ const Password = () => {
     } else {
       document.querySelector(".rs").removeAttribute("checked");
       document.querySelector(".rh").setAttribute("checked", true);
-      setSelectedText("Hide");
+      setSelectedText("Hide my identity");
       setSelectedIcon("feather-eye-off");
       selectHandleChangeState(0);
     }
@@ -231,8 +231,8 @@ const Password = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="row p-2" value="saleoption">
-                        <div className="col-xl-2 col-xxl-2 col-lg-2 p-0 mt-5 d-flex justify-content-start">
+                      <div className="row p-2 mt-3" value="saleoption">
+                        <div className="col-12 col-xl-2 col-xxl-2 col-lg-2 col-md-2 mt-4 d-flex justify-content-start">
                           <i
                             className="font-xxl ti-image d-block p-2 text-grey-500 mediaload"
                             onClick={() => fileUpload.current.click()}
@@ -263,7 +263,7 @@ const Password = () => {
                             required={true}
                           />
                         </div>
-                        <div className="col-xl-5 col-xxl-5 col-lg-5 mt-1">
+                        <div className="col-12 col-xl-5 col-xxl-5 col-lg-5 col-md-5 mt-1">
                           <label className="text-yellow">Payment Option</label>
                           <div className="col-lg-3 mt-1 mb-3 d-flex align-items-end">
                             <label
@@ -295,14 +295,15 @@ const Password = () => {
                             >
                               Free
                             </label>
-
-                            <div className="main">
-                              <div className="hsdropdown" onClick={showlist}>
-                                <div className="textBox" readonly><i class={selectedIcon} />&nbsp;{selectedText}</div>
-                                <div className="option">
-                                  <div onClick={() => sh("Show")}><i class="feather-eye" />&nbsp;Show<span className="hsc"><input type="radio" name="s" className="rs" /></span></div>
-                                  <div onClick={() => sh("Hide")}><i class="feather-eye-off" />&nbsp;Hide<span className="hsc"><input type="radio" name="h" className="rh" /></span></div>
-                                </div>
+                          </div>
+                        </div>
+                        <div className="col-12 col-xl-5 col-xxl-5 col-lg-5 col-md-5 mt-1">
+                          <div className="main">
+                            <div className="hsdropdown" onClick={showlist}>
+                              <div className="textBox" readonly><i class={selectedIcon} />&nbsp;{selectedText}</div>
+                              <div className="option">
+                                <div onClick={() => sh("Show")}><i class="feather-eye" /><span className="selectText">&nbsp;Anonymous</span><span className="hsc"><input type="radio" name="s" className="rs" /></span></div>
+                                <div onClick={() => sh("Hide")}><i class="feather-eye-off" /><span className="selectText">&nbsp;Hide my identity</span><span className="hsc"><input type="radio" name="h" className="rh" /></span></div>
                               </div>
                             </div>
                           </div>

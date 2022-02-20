@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
 import Leftnav from "../components/Leftnav";
 import Appfooter from "../components/Appfooter";
@@ -14,6 +15,8 @@ import "./react-tabs.css";
 import "./react-modal.css";
 
 const Wallet = () => {
+    const dispatch = useDispatch();
+    const { user, vcoin, isauthenticated } = useSelector(state => state.auth);
     const [open, setOpen] = useState(false);
 
     const onOpenModal = () => setOpen(true);
@@ -32,7 +35,7 @@ const Wallet = () => {
                                     <div className="row">
                                         <div className="col-lg-12">
                                             <div className="eth_image"><img src="../../assets/images/eth_logo.svg" width={40} height={40} /></div>
-                                            <div className="balance text-center text-white fw-500"><span>0 TCoin</span></div>
+                                            <div className="balance text-center text-white fw-500"><span>{Math.floor(vcoin * 100) / 100} TrooCoin</span></div>
                                             <div className="col-lg-12 d-flex mb-3">
                                                 <div className="col-lg-4 col-md-3 col-sm-3 col-1"></div>
                                                 <div className="col-lg-4 col-md-6 col-sm-6 col-10 d-flex justify-content-around">
@@ -79,7 +82,7 @@ const Wallet = () => {
             </div>
             <div>
                 <Modal open={open} onClose={onCloseModal} center>
-                    <h1 className="headerTitle">Deposit TCoin</h1>
+                    <h1 className="headerTitle">Deposit TrooCoin</h1>
                     <h4>To interact with decentralized applications using MetaMask, you'll need Ether in your wallet.</h4>
                     <hr />
                 </Modal>

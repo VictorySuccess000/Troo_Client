@@ -102,6 +102,7 @@ const Donate = (props) => {
                                         value={donateCoin}
                                         onChange={(event) => addAmount(event.target.value)}
                                         required={true}
+                                        maxLength="3"
                                     >
                                         <Mention
                                             trigger="#"

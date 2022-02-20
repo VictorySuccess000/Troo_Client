@@ -5,15 +5,44 @@ import Leftnav from "../components/Leftnav";
 import Appfooter from "../components/Appfooter";
 import Popupchat from "../components/Popupchat";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import {
     notifysuccess,
-    notifywarning,
-    notifyerror,
 } from "../components/notify";
 
 const Send = () => {
+    const dispatch = useDispatch();
     const [notexit, setNotexit] = useState("Cool");
+    const [user_name, setUsername] = useState("");
+    const [donateCoin, setDonateCoin] = useState("");
+    const [rate, setRate] = useState("");
+    const { vcoin } = useSelector(state => state.auth);
+
+    function addAmount(input) {
+        setDonateCoin(input);
+        if (input > vcoin) {
+            setRate("more");
+        } else if (input <= vcoin) {
+            setRate("less");
+        } else {
+            setRate("");
+        }
+        if (input == "" || input == 0) {
+            setRate("");
+        }
+        if (isNaN(input)) {
+            setDonateCoin(input.slice(0, -1));
+            setRate("more");
+        }
+    }
+
+    function init() {
+        setNotexit("Cool");
+        setUsername("");
+    }
+
     const checkUsername = (username) => {
+        setUsername(username);
         if (username == "") {
             setNotexit("Cool");
         } else {
@@ -55,26 +84,44 @@ const Send = () => {
                                                 </h1>
                                             </div>
                                             <div className="col-4 col-sm-4 col-lg-4 col-md-4 text-right">
-                                                <Link to="/wallet"><h5 className="cursor-pointer">Cancel</h5></Link>
+                                                {notexit != "" ? <Link to="/wallet"><h5 className="cursor-pointer">Cancel</h5></Link> : ""}
                                             </div>
                                         </div>
-                                        <div className="input-group mb-3">
-                                            <span className="input-group-text text-1">{notexit != "" ? <img className="cursor-pointer" src="../../assets/images/search-white.png" width={30} height={30} /> : <img className="cursor-pointer" src="../../assets/images/verified.png" width={30} height={30} />}</span>
-                                            <input type="text" className="form-control main-input" placeholder="Search, public address (username)" aria-label="Search, public address (username)" aria-describedby="basic-addon2" onChange={(e) => checkUsername(e.target.value)} />
-                                            <span className="input-group-text text-2"><img className="cursor-pointer" src="../../assets/images/qr-blue.svg" width={30} height={30} /></span>
+                                        <div className="input-group mb-3 d-flex">
+                                            <span className="input-group-text text-1 col-lg-1 col-md-1 col-sm-1 col-2 d-flex justify-content-center">{notexit != "" ? <img className="cursor-pointer" src="../../assets/images/search-white.png" width={30} height={30} /> : <img className="cursor-pointer" src="../../assets/images/verified.png" width={30} height={30} />}</span>
+                                            <div className="col-lg-10 col-md-10 col-sm-10 col-8"><input type="text" className="main-input" placeholder="Search, public address (username)" onChange={(e) => checkUsername(e.target.value)} value={user_name} /></div>
+                                            <span className="input-group-text text-2 col-lg-1 col-md-1 col-sm-1 col-2 d-flex justify-content-center">
+                                                {notexit != "" ? <img className="cursor-pointer" src="../../assets/images/qr-blue.svg" width={30} height={30} /> : <img className="cursor-pointer" src="../../assets/images/send_close.png" width={20} height={20} onClick={init} />}
+                                            </span>
                                         </div>
                                     </div>
                                     <div className={`error ${notexit}`} >Recipient username is invalid</div>
                                 </div>
                             </div>
-
-                            <div className="card w-100 border-0 bg-white shadow-xs p-0">
+                            {notexit == "" ? <div className="card w-100 border-0 bg-white shadow-xs p-0">
                                 <div className="card-body p-lg-5 p-4 w-100 border-0">
                                     <div className="row">
-                                        {/* Please */}
+                                        <div className="d-flex">
+                                            <div className="col-lg-2 col-md-2 col-sm-2 col-2"></div>
+                                            <div className="col-lg-2 col-md-2 col-sm-2 col-4 text-white d-flex align-items-center"><h3>Amount:</h3></div>
+                                            <div className="col-lg-6 col-md-6 col-sm-6 col-4"><input type="text" className={`amount ${rate}`} value={donateCoin} onChange={(event) => addAmount(event.target.value)} maxLength="3" /></div>
+                                            <div className="col-lg-2 col-md-2 col-sm-2 col-2"></div>
+                                        </div>
+                                        {rate == "more" ? <div className="d-flex mt-2">
+                                            <div className="col-lg-4 col-md-4 col-sm-4 col-2"></div>
+                                            <div className="col-lg-8 col-md-8 col-sm-8 col-10 moreRate">Insufficient funds.</div>
+                                        </div> : ""}
+                                        <div className="d-flex mt-5">
+                                            <div className="col-lg-2 col-md-2 col-sm-2 col-2"></div>
+                                            <div className="col-lg-3 col-md-3 col-sm-3 col-4"><Link to="/wallet"><button type="button" className="cancel_btn">Cancel</button></Link></div>
+                                            <div className="col-lg-2 col-md-2 col-sm-2 col-1"></div>
+                                            {rate == "less" ? <div className="col-lg-3 col-md-3 col-sm-3 col-3"><button type="button" className="next_btn">Next</button></div> : <div className="col-lg-3 col-md-3 col-sm-3 col-3"><button type="button" className="next_btn lessthan" disabled>Next</button></div>}
+                                            <div className="col-lg-2 col-md-2 col-sm-2 col-2"></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> : ""}
+
                         </div>
                     </div>
                 </div>
@@ -82,7 +129,7 @@ const Send = () => {
 
             <Popupchat />
             <Appfooter />
-        </Fragment>
+        </Fragment >
     );
 };
 

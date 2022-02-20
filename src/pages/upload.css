@@ -1,6 +1,5 @@
 .main{
     transition: 0.5s;
-    margin-left: 30px;
 }
 .main.active{
     left: 80px;
@@ -8,7 +7,7 @@
 .hsdropdown{
     position: relative;
     margin-top: 10px;
-    width: 200px;
+    width: 250px;
     height: 50px;
     display: flex;
     align-items: center;
@@ -72,8 +71,11 @@
 .hsc {
     display: flex;
     align-items: center;
-    width: 100%;
+    width: 50%;
     justify-content: flex-end;
+}
+.selectText {
+    width: 300px;
 }
 .hsdropdown .option div{
     display: flex;

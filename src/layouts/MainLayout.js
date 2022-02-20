@@ -30,7 +30,7 @@ const MainLayout = (props) => {
         <Fragment>
             <Header />
             {/* <Rightchat /> */}
-            <div className="main-content right-chat-active " style={{ paddingLeft: navwidth }} onScroll={handleScroll}>
+            <div className="main-content right-chat-active " onScroll={handleScroll}>
                 {props.children}
             </div>
             <Popupchat />

@@ -93,8 +93,8 @@ const Header = () => {
       </Link>
       <Darkbutton />
       <div className="p-0 ms-3 menu-icon">
-        <h3 className="border-bottom-1 border-dark">{Math.round(vcoin * 100) / 100} Tcoin</h3>
-        <h3>{Number(1)} Tcoin / $</h3>
+        <h3 className="border-bottom-1 border-dark">{Math.round(vcoin * 100) / 100} TrooCoin</h3>
+        <h3>{Number(1)} TrooCoin / $</h3>
       </div>
 
       <nav

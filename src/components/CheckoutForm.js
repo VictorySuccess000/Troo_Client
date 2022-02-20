@@ -80,6 +80,7 @@ export default function CheckoutForm() {
     <div className="col-lg-12 mb-1">
       <form id="payment-form" onSubmit={handleSubmit}>
         <PaymentElement id="payment-element" />
+        <input type="text" className="form-control mt-4" placeholder="TrooCoin Count" />
         <button disabled={isLoading || !stripe || !elements} id="submit" className="cardbtn mt-3 mb-3">
           <span id="button-text">
             {isLoading ? <div className="spinner" id="spinner"></div> : "Pay"}
